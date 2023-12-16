@@ -128,6 +128,7 @@ export const App = () => {
           <Input
             labelText="Rows"
             min={10}
+            max={1000}
             id="rows"
             type="number"
             onChange={changeRowsHandler}
@@ -137,6 +138,7 @@ export const App = () => {
             labelText="Columns"
             id="columns"
             min={10}
+            max={1000}
             onChange={changeColsHandler}
             value={size.cols}
           />
