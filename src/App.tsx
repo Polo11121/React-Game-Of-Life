@@ -137,6 +137,7 @@ export const App = () => {
           <Input
             labelText="Columns"
             id="columns"
+            type="number"
             min={10}
             max={1000}
             onChange={changeColsHandler}
