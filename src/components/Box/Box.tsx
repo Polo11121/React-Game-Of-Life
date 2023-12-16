@@ -7,6 +7,7 @@ type BoxProps = {
   cols: number;
   onSelectBox: (row: number, col: number) => void;
   isMouseDown: boolean;
+  boxSize: number;
 };
 
 export const Box = ({
@@ -16,6 +17,7 @@ export const Box = ({
   cols,
   onSelectBox,
   isMouseDown,
+  boxSize,
 }: BoxProps) => {
   const mouseOverHandler = () => {
     if (isMouseDown) {
@@ -28,6 +30,10 @@ export const Box = ({
   return (
     <div
       className={`box ${className}`}
+      style={{
+        height: boxSize,
+        width: boxSize,
+      }}
       onMouseOver={mouseOverHandler}
       onClick={clickHandler}
       id={boxId}

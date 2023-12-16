@@ -1,17 +1,33 @@
 import { FocusEvent, useState } from "react";
-import { Button, Grid, Input } from "@/components";
+import { Button, Grid, Input, Select } from "@/components";
 import "@/App.css";
+
+const SIZES = [
+  {
+    label: "25x25",
+    value: 25,
+  },
+  {
+    label: "50x50",
+    value: 50,
+  },
+  {
+    label: "75x75",
+    value: 75,
+  },
+  {
+    label: "100x100",
+    value: 100,
+  },
+];
 
 export const App = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [speed, setSpeed] = useState(1000);
-  const [size, setSize] = useState({
-    rows: 50,
-    cols: 50,
-  });
+  const [size, setSize] = useState(25);
   const [generations, setGenerations] = useState(0);
   const [grid, setGrid] = useState<boolean[][]>(() =>
-    Array(size.rows).fill(Array(size.cols).fill(false))
+    Array(size).fill(Array(size).fill(false))
   );
   const isDisabled = grid.flat().every((box) => !box);
 
@@ -52,26 +68,22 @@ export const App = () => {
             if (i > 0 && j > 0 && prevGrid[i - 1][j - 1]) {
               neighborsCount++;
             }
-            if (i > 0 && j < size.cols - 1 && prevGrid[i - 1][j + 1]) {
+            if (i > 0 && j < size - 1 && prevGrid[i - 1][j + 1]) {
               neighborsCount++;
             }
-            if (j < size.cols - 1 && prevGrid[i][j + 1]) {
+            if (j < size - 1 && prevGrid[i][j + 1]) {
               neighborsCount++;
             }
             if (j > 0 && prevGrid[i][j - 1]) {
               neighborsCount++;
             }
-            if (i < size.rows - 1 && prevGrid[i + 1][j]) {
+            if (i < size - 1 && prevGrid[i + 1][j]) {
               neighborsCount++;
             }
-            if (i < size.rows - 1 && j > 0 && prevGrid[i + 1][j - 1]) {
+            if (i < size - 1 && j > 0 && prevGrid[i + 1][j - 1]) {
               neighborsCount++;
             }
-            if (
-              i < size.rows - 1 &&
-              j < size.cols - 1 &&
-              prevGrid[i + 1][j + 1]
-            ) {
+            if (i < size - 1 && j < size - 1 && prevGrid[i + 1][j + 1]) {
               neighborsCount++;
             }
 
@@ -92,18 +104,11 @@ export const App = () => {
     }, speed);
   };
 
-  const changeRowsHandler = (event: FocusEvent<HTMLInputElement, Element>) => {
-    const rows = +event.target.value;
-    setSize((prevGrid) => ({ ...prevGrid, rows }));
+  const changeSizeHandler = (event: FocusEvent<HTMLSelectElement, Element>) => {
+    const size = +event.target.value;
+    setSize(size);
     stopGameHandler();
-    setGrid(Array(rows).fill(Array(size.cols).fill(false)));
-    setGenerations(0);
-  };
-  const changeColsHandler = (event: FocusEvent<HTMLInputElement, Element>) => {
-    const cols = +event.target.value;
-    setSize((prevGrid) => ({ ...prevGrid, cols }));
-    stopGameHandler();
-    setGrid(Array(size.rows).fill(Array(cols).fill(false)));
+    setGrid(Array(size).fill(Array(size).fill(false)));
     setGenerations(0);
   };
   const changeSpeedHandler = (event: FocusEvent<HTMLInputElement, Element>) => {
@@ -125,23 +130,11 @@ export const App = () => {
     <div>
       <div className="form">
         <div className="form-input">
-          <Input
-            labelText="Rows"
-            min={10}
-            max={1000}
-            id="rows"
-            type="number"
-            onChange={changeRowsHandler}
-            value={size.rows}
-          />
-          <Input
-            labelText="Columns"
-            id="columns"
-            type="number"
-            min={10}
-            max={1000}
-            onChange={changeColsHandler}
-            value={size.cols}
+          <Select
+            labelText="Size"
+            id="size"
+            options={SIZES}
+            onChange={changeSizeHandler}
           />
           <Input
             labelText="Speed (ms)"
@@ -149,6 +142,8 @@ export const App = () => {
             type="number"
             onChange={changeSpeedHandler}
             value={speed}
+            min={1}
+            max={1000}
           />
         </div>
         <div className="form-buttons">

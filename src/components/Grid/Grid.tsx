@@ -4,19 +4,26 @@ import "@/components/Grid/Grid.css";
 
 type GridProps = {
   grid: boolean[][];
-  size: {
-    rows: number;
-    cols: number;
-  };
+  size: number;
   onSelectBox: (row: number, col: number) => void;
+};
+
+const BOX_SIZES = {
+  25: 16,
+  50: 8,
+  75: 6,
+  100: 4,
+} as {
+  [key: number]: number;
 };
 
 export const Grid = ({ size, grid, onSelectBox }: GridProps) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
-  const width = size.cols * 16;
 
   const mouseDownHandler = () => setIsMouseDown(true);
   const mouseUpHandler = () => setIsMouseDown(false);
+
+  const boxSize = BOX_SIZES[size];
 
   return (
     <div
@@ -25,7 +32,7 @@ export const Grid = ({ size, grid, onSelectBox }: GridProps) => {
       onMouseUp={mouseUpHandler}
       onMouseLeave={mouseUpHandler}
       style={{
-        width,
+        gridTemplateColumns: `repeat(${size}, ${boxSize}px)`,
       }}
     >
       {grid
@@ -42,6 +49,7 @@ export const Grid = ({ size, grid, onSelectBox }: GridProps) => {
                 cols={colIndex}
                 onSelectBox={onSelectBox}
                 className={col ? "on" : "off"}
+                boxSize={boxSize}
               />
             );
           })
