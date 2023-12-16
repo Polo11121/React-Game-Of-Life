@@ -1,5 +1,5 @@
 import { FocusEvent, useState } from "react";
-import { Button, Grid, Input, Select } from "@/components";
+import { Button, Grid, Select } from "@/components";
 import "@/App.css";
 
 const SIZES = [
@@ -17,6 +17,25 @@ const SIZES = [
   },
   {
     label: "100x100",
+    value: 100,
+  },
+];
+
+const SPEEDS = [
+  {
+    label: "1000",
+    value: 1000,
+  },
+  {
+    label: "500",
+    value: 500,
+  },
+  {
+    label: "250",
+    value: 250,
+  },
+  {
+    label: "100",
     value: 100,
   },
 ];
@@ -111,7 +130,9 @@ export const App = () => {
     setGrid(Array(size).fill(Array(size).fill(false)));
     setGenerations(0);
   };
-  const changeSpeedHandler = (event: FocusEvent<HTMLInputElement, Element>) => {
+  const changeSpeedHandler = (
+    event: FocusEvent<HTMLSelectElement, Element>
+  ) => {
     setSpeed(+event.target.value);
 
     if (isStarted) {
@@ -135,15 +156,14 @@ export const App = () => {
             id="size"
             options={SIZES}
             onChange={changeSizeHandler}
+            value={size}
           />
-          <Input
+          <Select
             labelText="Speed (ms)"
             id="speed"
-            type="number"
+            options={SPEEDS}
             onChange={changeSpeedHandler}
             value={speed}
-            min={1}
-            max={1000}
           />
         </div>
         <div className="form-buttons">
