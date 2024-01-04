@@ -9,10 +9,10 @@ type GridProps = {
 };
 
 const BOX_SIZES = {
-  25: 16,
-  50: 8,
+  25: 18,
+  50: 9,
   75: 6,
-  100: 4,
+  100: 4.5,
 } as {
   [key: number]: number;
 };
