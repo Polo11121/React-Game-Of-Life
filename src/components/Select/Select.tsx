@@ -9,7 +9,12 @@ type SelectProps = DetailedHTMLProps<
   options: { label: string; value: number }[];
 };
 
-export const Select = ({ labelText, options, ...props }: SelectProps) => (
+export const Select = ({
+  labelText,
+  options,
+
+  ...props
+}: SelectProps) => (
   <div className="select-container">
     <label htmlFor={props.id}>{labelText}</label>
     <select {...props} className="select">

@@ -1,10 +1,10 @@
-.select-container {
+.input-container {
   display: flex;
   flex-direction: column;
   width: 221px;
 }
 
-.select {
+.input {
   padding: 6px 12px;
   font-size: 16px;
   font-weight: 400;
@@ -18,13 +18,13 @@
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.select:disabled {
+.input:disabled {
   background-color: #e9ecef;
   opacity: 0.65;
   cursor: not-allowed;
 }
 
-.select:focus {
+.input:focus {
   color: #212529;
   background-color: #fff;
   border-color: #86b7fe;

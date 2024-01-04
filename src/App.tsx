@@ -1,5 +1,5 @@
-import { FocusEvent, useState } from "react";
-import { Button, Grid, Select } from "@/components";
+import { FocusEvent, useEffect, useState } from "react";
+import { Button, Grid, Input, Select } from "@/components";
 import "@/App.css";
 
 const SIZES = [
@@ -44,7 +44,8 @@ export const App = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [speed, setSpeed] = useState(1000);
   const [size, setSize] = useState(25);
-  const [generations, setGenerations] = useState(0);
+  const [numberOfIterations, setNumberOfIterations] = useState(0);
+  const [iterations, setIterations] = useState(0);
   const [grid, setGrid] = useState<boolean[][]>(() =>
     Array(size).fill(Array(size).fill(false))
   );
@@ -70,6 +71,9 @@ export const App = () => {
   const startGameHandler = () => {
     if (isDisabled) {
       return alert("You must generate seed first!");
+    }
+    if (iterations === numberOfIterations) {
+      setIterations(0);
     }
 
     stopGameHandler();
@@ -119,7 +123,7 @@ export const App = () => {
         )
       );
 
-      setGenerations((prevGen) => prevGen + 1);
+      setIterations((prevGen) => prevGen + 1);
     }, speed);
   };
 
@@ -128,24 +132,38 @@ export const App = () => {
     setSize(size);
     stopGameHandler();
     setGrid(Array(size).fill(Array(size).fill(false)));
-    setGenerations(0);
+    setIterations(0);
   };
   const changeSpeedHandler = (
     event: FocusEvent<HTMLSelectElement, Element>
   ) => {
     setSpeed(+event.target.value);
-
-    if (isStarted) {
-      startGameHandler();
-    }
   };
   const generateSeedHandler = () => {
     setGrid((prevGrid) =>
       prevGrid.map((gridRow) => gridRow.map(() => Math.random() >= 0.9))
     );
     stopGameHandler();
-    setGenerations(0);
+    setIterations(0);
   };
+  const changeNumberOfIterationsHandler = (
+    event: FocusEvent<HTMLInputElement, Element>
+  ) => {
+    setIterations(0);
+    setNumberOfIterations(+event.target.value);
+  };
+
+  useEffect(() => {
+    if (numberOfIterations > 0 && iterations === numberOfIterations) {
+      stopGameHandler();
+    }
+  }, [iterations, numberOfIterations]);
+
+  useEffect(() => {
+    if (isStarted) {
+      startGameHandler();
+    }
+  }, [speed]);
 
   return (
     <div>
@@ -154,9 +172,19 @@ export const App = () => {
           <Select
             labelText="Size"
             id="size"
+            disabled={isStarted}
             options={SIZES}
             onChange={changeSizeHandler}
             value={size}
+          />
+          <Input
+            labelText={`Number of iterations ${
+              !numberOfIterations ? "(infinite)" : `(${numberOfIterations})`
+            }`}
+            disabled={isStarted}
+            id="iterations"
+            onChange={changeNumberOfIterationsHandler}
+            value={numberOfIterations}
           />
           <Select
             labelText="Speed (ms)"
@@ -179,7 +207,7 @@ export const App = () => {
         </div>
       </div>
       <h1>Game of Life Michał Jasiński 155280</h1>
-      <h2>Generations: {generations}</h2>
+      <h2>Iteration: {iterations}</h2>
       <Grid grid={grid} size={size} onSelectBox={selectBoxHandler} />
     </div>
   );
